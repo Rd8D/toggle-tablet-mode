@@ -8,6 +8,7 @@ def main() -> None:
 	touchpad_id = get_touchpad()
 	toggle_device(keyboard_id)
 	toggle_device(touchpad_id)
+	rotate_display()
 
 def get_keyboard(device: str = 'AT Translated Set 2 keyboard'):
 	meta = run('xinput --list | grep "%s"' % device)
@@ -23,7 +24,11 @@ def toggle_device(device: str) -> None:
 	state = is_enabled(device)
 	new_state = state ^ 1
 	run('xinput set-prop "%s" "Device Enabled" "%d"' % (device, new_state))
-
+	
+def rotate_display() -> None:
+	orientation = run('xrandr --query --verbose | grep "eDP-1" | cut -d " " -f 6')
+	run("xrandr -o inverted" if re.search("normal", orientation) else "xrandr -o normal")
+	
 def is_enabled(device: str) -> int:
 	meta = run('xinput list-props "%s" | grep "Device Enabled"' % device)
 	m = re.search(':\s*(\d+)', meta)
