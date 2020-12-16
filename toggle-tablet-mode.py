@@ -27,7 +27,7 @@ def toggle_device(device: str) -> None:
 	
 def rotate_display() -> None:
 	orientation = run('xrandr --query --verbose | grep "eDP-1" | cut -d " " -f 6')
-	run("xrandr -o inverted" if re.search("normal", orientation) else "xrandr -o normal")
+	run('xrandr -o inverted' if re.search("normal", orientation) else 'xrandr -o normal')
 	
 def is_enabled(device: str) -> int:
 	meta = run('xinput list-props "%s" | grep "Device Enabled"' % device)
